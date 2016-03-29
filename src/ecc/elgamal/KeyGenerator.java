@@ -14,10 +14,35 @@ import java.util.ArrayList;
 public class KeyGenerator {
     private ArrayList<Point> pointVect = new ArrayList<>();
     private int prime = 5;
+    private long max = 15;
+
+    public ArrayList<Point> getPointVect() {
+        return pointVect;
+    }
+
+    public void setPointVect(ArrayList<Point> pointVect) {
+        this.pointVect = pointVect;
+    }
+
+    public int getPrime() {
+        return prime;
+    }
+
+    public void setPrime(int prime) {
+        this.prime = prime;
+    }
+
+    public long getMax() {
+        return max;
+    }
+
+    public void setMax(long max) {
+        this.max = max;
+    }
     
     public void ellipticalCurveFunc(int a, int b) {
         int y; //y2 = x3 + ax + b
-        for (int x = 0; x < 15; x++) {
+        for (int x = 0; x < max; x++) {
             y = (int)Math.sqrt(x*x*x + a*x + b);
             if (y*y == x*x*x + a*x + b) {
                 int xTemp = x;
@@ -62,7 +87,6 @@ public class KeyGenerator {
                 idx = (i+n)%prime;
                 break;
             }
-                
         }
         
         return pointVect.get(idx);
@@ -84,9 +108,7 @@ public class KeyGenerator {
         kg.generatePublicKey(2, p2).print();
         System.out.print("Alice's Public Key : ");
         kg.generatePublicKey(3, p1).print();
-        
-        
-        
+                
     }
     
 }

@@ -13,9 +13,18 @@ import java.util.ArrayList;
  */
 public class KeyGenerator {
     private ArrayList<Point> pointVect = new ArrayList<>();
-    private int prime = 5;
-    private long max = 15;
+    private int prime;
+    private long max;
 
+    public KeyGenerator(int prime, long max) {
+        this.prime = prime;
+        this.max = max;
+    }
+    public KeyGenerator() {
+        prime = 5;
+        max = 15;
+    }
+    
     public ArrayList<Point> getPointVect() {
         return pointVect;
     }
@@ -68,14 +77,14 @@ public class KeyGenerator {
         }
     }
     
-    public Point generatePrivateKey(int n) { //asumsi nilai n pasti lebih kecil dari prime
+    public Point generatePublicKey(int n) { //asumsi nilai n pasti lebih kecil dari prime
         if (n > prime) {
             System.out.println("Error nilai n harus lebih kecil atau sama dengan prime");
         }
         return pointVect.get(n-1);
     }
     
-    public Point generatePublicKey(int n, Point p) { //asumsi nilai n pasti lebih kecil dari prime
+    public Point generatePrivateKey(int n, Point p) { //asumsi nilai n pasti lebih kecil dari prime
         if (n > prime) {
             System.out.println("Error nilai n harus lebih kecil atau sama dengan prime");
             
@@ -98,16 +107,16 @@ public class KeyGenerator {
         KeyGenerator kg = new KeyGenerator();
         kg.ellipticalCurveFunc(2, 1);
         kg.printEllipticalPoints();
-        System.out.print("Bob's Private Key : ");
-        kg.generatePrivateKey(2).print(); //Bob's Private Key
-        Point p1 = new Point(kg.generatePrivateKey(2).getX(),kg.generatePrivateKey(2).getY());
-        System.out.print("Alice's Private Key : ");
-        kg.generatePrivateKey(3).print(); //Alice's Private Key
-        Point p2 = new Point(kg.generatePrivateKey(3).getX(),kg.generatePrivateKey(3).getY());
         System.out.print("Bob's Public Key : ");
-        kg.generatePublicKey(2, p2).print();
+        kg.generatePublicKey(2).print(); //Bob's Private Key
+        Point p1 = new Point(kg.generatePublicKey(2).getX(),kg.generatePublicKey(2).getY());
         System.out.print("Alice's Public Key : ");
-        kg.generatePublicKey(3, p1).print();
+        kg.generatePublicKey(3).print(); //Alice's Private Key
+        Point p2 = new Point(kg.generatePublicKey(3).getX(),kg.generatePublicKey(3).getY());
+        System.out.print("Bob's Private Key : ");
+        kg.generatePrivateKey(2, p2).print();
+        System.out.print("Alice's Private Key : ");
+        kg.generatePrivateKey(3, p1).print();
                 
     }
     

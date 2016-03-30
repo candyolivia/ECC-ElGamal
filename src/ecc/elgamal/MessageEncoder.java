@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class MessageEncoder {
     private int prime = 5;
-    private long max = 15;
+    private long max = 30;
     private int a = 2;
     private int b = 1;
     private ArrayList<Point> encriptedPoints = new ArrayList<>();
@@ -22,6 +22,7 @@ public class MessageEncoder {
     
     public MessageEncoder() {
         kg.ellipticalCurveFunc(a, b);
+        kg.printEllipticalPoints();
     }
 
     public KeyGenerator getKg() {
@@ -113,6 +114,15 @@ public class MessageEncoder {
         }
     }
     
+    public void decript(int id, Point privateKey) {
+        for (int i = 0; i < encriptionRes.size(); i++) {
+            Point M = new Point(kg.getPointVect().get(kg.checkKeyPosition(privateKey)+kg.checkKeyPosition(encriptionRes.get(i).getC1())));
+            Point Pm = new Point(encriptionRes.get(i).getC2().substractPoints(M));
+            Pm.setY(Pm.getY()+1);
+            Pm.print();
+        }
+        
+    }
     
     public void printEncriptedPoints() {
         for (int i = 0; i < encriptedPoints.size(); i++) {
@@ -138,9 +148,14 @@ public class MessageEncoder {
         System.out.println("Elliptical Points : ");
         me.getKg().printEllipticalPoints();
         System.out.println("Public Key : ");
-        me.getKg().generatePublicKey(3).print();
+        if (me.getKg().generatePublicKey(3)!=null) {
+            me.getKg().generatePublicKey(3).print();
+        }
         me.encript(me.getKg().generatePublicKey(3),1);
         me.printEncriptionRes();
+        System.out.println("Decript Result Pm : ");
+        Point p1 = new Point(me.getKg().generatePublicKey(2).getX(),me.getKg().generatePublicKey(2).getY());
+        me.decript(3, p1);
     }
     
     

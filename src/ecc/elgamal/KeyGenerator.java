@@ -15,6 +15,10 @@ public class KeyGenerator {
     private ArrayList<Point> pointVect = new ArrayList<>();
     private int prime;
     private long max;
+    private int largestOrder;
+    private Point G;
+    private int a = 2;
+    private int b = 1;
 
     public KeyGenerator(int prime, long max) {
         this.prime = prime;
@@ -49,7 +53,7 @@ public class KeyGenerator {
         this.max = max;
     }
     
-    public void ellipticalCurveFunc(int a, int b) {
+    public void ellipticalCurveFunc() {
         int y; //y2 = x3 + ax + b
         for (int x = 0; x < max; x++) {
             y = (int)Math.sqrt(x*x*x + a*x + b);
@@ -69,6 +73,8 @@ public class KeyGenerator {
                 pointVect.add(temp);
             }
         }
+        largestOrder = pointVect.size()-1;
+        G = pointVect.get(largestOrder);
     }
     
     public void printEllipticalPoints() {
@@ -77,28 +83,31 @@ public class KeyGenerator {
         }
     }
     
-    public Point generatePublicKey(int n) { //asumsi nilai n pasti lebih kecil dari prime
-        if (n > prime) {
+    public Point generatePublicKey(Point privateKey) { //asumsi nilai n pasti lebih kecil dari prime
+        Point Q = new Point(G.multiplePoints(privateKey));
+        return Q;
+    }
+    
+    public Point generatePrivateKey(int n) { //asumsi nilai n pasti lebih kecil dari prime
+        if (n > prime){
             System.out.println("Error nilai n harus lebih kecil atau sama dengan prime");
+            assert n>prime : "number is greater than prime";
         }
+        
         return pointVect.get(n-1);
     }
     
-    public Point generatePrivateKey(int n, Point p) { //asumsi nilai n pasti lebih kecil dari prime
-        if (n > prime) {
-            System.out.println("Error nilai n harus lebih kecil atau sama dengan prime");
-            
+    public boolean publicKeyValidation(Point publicKey) {
+        boolean cek = false;
+        if (publicKey.isOrigin()) {
+            //do nothing because key at infinity
+        } else {
+            //x*x*x + a*x + b
+            int ySquared = publicKey.getY()*publicKey.getY();
+            int x = publicKey.getX();
+            cek = ySquared == x*x*x + a*x +b;
         }
-        
-        int idx = 0;
-        for (int i = 0; i < pointVect.size(); i++) {
-            if(p.equals(pointVect.get((i+n)%prime))) {
-                idx = (i+n)%prime;
-                break;
-            }
-        }
-        
-        return pointVect.get(idx);
+        return cek;
     }
     
     public int checkKeyPosition(Point key) {
@@ -123,30 +132,17 @@ public class KeyGenerator {
         return cek;
     }
     
-//    public boolean checkKeyValidity(int a, Point privateKeyA, Point publicKeyB) {
-//        
-//        System.out.println((checkKeyPosition(publicKey)-a+1)%pointVect.size());
-//        
-//        return (pointVect.get(a-1).equals(pointVect.get((checkKeyPosition(publicKey)-a+1)%pointVect.size())));
-//    }
-    
     public static void main(String[] args) {
         // TODO code application logic here
         KeyGenerator kg = new KeyGenerator();
-        kg.ellipticalCurveFunc(2, 1);
+        kg.ellipticalCurveFunc();
         kg.printEllipticalPoints();
-        System.out.print("Bob's Public Key : ");
-        kg.generatePublicKey(2).print(); //Bob's Private Key
-        Point p1 = new Point(kg.generatePublicKey(2).getX(),kg.generatePublicKey(2).getY());
-        System.out.print("Alice's Public Key : ");
-        kg.generatePublicKey(3).print(); //Alice's Private Key
-        Point p2 = new Point(kg.generatePublicKey(3).getX(),kg.generatePublicKey(3).getY());
         System.out.print("Bob's Private Key : ");
-        kg.generatePrivateKey(2, p2).print();
-        System.out.print("Alice's Private Key : ");
-        kg.generatePrivateKey(3, p1).print();
-        
-        System.out.println(kg.isElementOfPoints(kg.generatePublicKey(3)));
+        Point bobPrivate = kg.generatePrivateKey(2);
+        kg.generatePrivateKey(2).print();
+        System.out.print("Bob's Public Key : ");
+        kg.generatePublicKey(bobPrivate).print();
+        System.out.println("Key Validation : " +kg.publicKeyValidation(bobPrivate));
                 
     }
     

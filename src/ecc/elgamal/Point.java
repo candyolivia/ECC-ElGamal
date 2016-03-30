@@ -55,4 +55,20 @@ public class Point {
     public Point addPoints(Point p1) {
         return new Point (p1.getX()+x, p1.getY()+y);  
     }
+    
+    public Point substractPoints(Point p1) {
+        return new Point (x-p1.getX(), y-p1.getY());  
+    }
+    
+    public Point multiplePoints(Point p1){
+        return new Point (x*p1.getX(), y*p1.getY());
+    }
+    
+    public Point multiply(int n) {
+        return new Point (x*n, y*n);
+    }
+    
+    public boolean isOrigin() {
+        return (x==0 && y ==0);
+    }
 }

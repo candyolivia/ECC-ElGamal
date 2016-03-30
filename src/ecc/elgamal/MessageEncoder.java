@@ -18,7 +18,20 @@ public class MessageEncoder {
     private int b = 1;
     private ArrayList<Point> encriptedPoints = new ArrayList<>();
     private ArrayList<EncryptionPoint> encriptionRes = new ArrayList<>();
-        
+    private KeyGenerator kg = new KeyGenerator(prime,max);
+    
+    public MessageEncoder() {
+        kg.ellipticalCurveFunc(a, b);
+    }
+
+    public KeyGenerator getKg() {
+        return kg;
+    }
+
+    public void setKg(KeyGenerator kg) {
+        this.kg = kg;
+    }
+    
     public int getPrime() {
         return prime;
     }
@@ -51,9 +64,7 @@ public class MessageEncoder {
         this.b = b;
     }
     
-    public void messageEncoding(String str) {
-        KeyGenerator kg = new KeyGenerator(prime,max);
-        kg.ellipticalCurveFunc(a, b);
+    public void messageEncoding(String str) {   
         
         for (int i = 0; i < str.length(); i++) {
             int theta;
@@ -73,9 +84,16 @@ public class MessageEncoder {
         }
     }
     
+    public String messageDecoding() {
+        String res = "";
+        
+        for (int i = 0; i < encriptedPoints.size(); i++) {
+            res += (char)(encriptedPoints.get(i).getX()-encriptedPoints.get(i).getY());
+        }
+        return res;
+    }
+    
     public void encript(Point publicKey, int rand) {
-        KeyGenerator kg = new KeyGenerator(prime,max);
-        kg.ellipticalCurveFunc(a, b);
         //check if the publicKey is valid
         for (int i = 0; i < encriptedPoints.size(); i++) {
             //kg.printEllipticalPoints();
@@ -95,6 +113,7 @@ public class MessageEncoder {
         }
     }
     
+    
     public void printEncriptedPoints() {
         for (int i = 0; i < encriptedPoints.size(); i++) {
             encriptedPoints.get(i).print();
@@ -111,16 +130,16 @@ public class MessageEncoder {
     public static void main(String[] args) {
         // TODO code application logic here
         MessageEncoder me = new MessageEncoder();
-        KeyGenerator kg = new KeyGenerator(me.getPrime(),me.getMax());
-        kg.ellipticalCurveFunc(me.getA(), me.getB());
         me.messageEncoding("aku");
+        System.out.println(me.messageDecoding());
+        
         System.out.println("Encripted Points : ");
         me.printEncriptedPoints();
         System.out.println("Elliptical Points : ");
-        kg.printEllipticalPoints();
+        me.getKg().printEllipticalPoints();
         System.out.println("Public Key : ");
-        kg.generatePublicKey(3).print();
-        me.encript(kg.generatePublicKey(3),1);
+        me.getKg().generatePublicKey(3).print();
+        me.encript(me.getKg().generatePublicKey(3),1);
         me.printEncriptionRes();
     }
     

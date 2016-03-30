@@ -101,6 +101,34 @@ public class KeyGenerator {
         return pointVect.get(idx);
     }
     
+    public int checkKeyPosition(Point key) {
+        int idx = -99;
+        for (int i = 0; i < pointVect.size(); i++) {
+            if (key.isEquals(pointVect.get(i))) {
+                idx = i;
+                break;
+            }
+        }
+        return idx;
+    }
+    
+    public boolean isElementOfPoints(Point p) {
+        boolean cek = false;
+        for (int i = 0; i < pointVect.size(); i++) {
+            if (p.isEquals(pointVect.get(i))){
+                cek = true;
+                break;
+            }
+        }
+        return cek;
+    }
+    
+//    public boolean checkKeyValidity(int a, Point privateKeyA, Point publicKeyB) {
+//        
+//        System.out.println((checkKeyPosition(publicKey)-a+1)%pointVect.size());
+//        
+//        return (pointVect.get(a-1).equals(pointVect.get((checkKeyPosition(publicKey)-a+1)%pointVect.size())));
+//    }
     
     public static void main(String[] args) {
         // TODO code application logic here
@@ -117,6 +145,8 @@ public class KeyGenerator {
         kg.generatePrivateKey(2, p2).print();
         System.out.print("Alice's Private Key : ");
         kg.generatePrivateKey(3, p1).print();
+        
+        System.out.println(kg.isElementOfPoints(kg.generatePublicKey(3)));
                 
     }
     

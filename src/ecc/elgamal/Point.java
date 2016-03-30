@@ -22,6 +22,11 @@ public class Point {
         x = _x;
         y = _y;
     }
+    
+    public Point(Point p) {
+        x = p.getX();
+        y = p.getY();
+    }
 
     public int getX() {
         return x;
@@ -43,7 +48,11 @@ public class Point {
         System.out.println("x = " + x + " y = " + y);
     }
     
-    public boolean isEquals(Point p1,Point p2) {
-        return (p1.getX()==p2.getX() && p1.getY() == p2.getY());
+    public boolean isEquals(Point p) {
+        return (p.getX()==x && p.getY() == y);
+    }
+    
+    public Point addPoints(Point p1) {
+        return new Point (p1.getX()+x, p1.getY()+y);  
     }
 }

@@ -12,10 +12,10 @@ import java.util.ArrayList;
  * @author Candy Olivia Mawalim
  */
 public class MessageEncoder {
-    private int prime = 5;
+    private long prime = 5;
     private long max = 30;
-    private int a = 2;
-    private int b = 1;
+    private long a = 2;
+    private long b = 1;
     private ArrayList<Point> encriptedPoints = new ArrayList<>();
     private ArrayList<EncryptionPoint> encriptionRes = new ArrayList<>();
     private KeyGenerator kg;
@@ -36,11 +36,11 @@ public class MessageEncoder {
         this.kg = kg;
     }
     
-    public int getPrime() {
+    public long getPrime() {
         return prime;
     }
 
-    public void setPrime(int prime) {
+    public void setPrime(long prime) {
         this.prime = prime;
     }
 
@@ -52,36 +52,36 @@ public class MessageEncoder {
         this.max = max;
     }
 
-    public int getA() {
+    public long getA() {
         return a;
     }
 
-    public void setA(int a) {
+    public void setA(long a) {
         this.a = a;
     }
 
-    public int getB() {
+    public long getB() {
         return b;
     }
 
-    public void setB(int b) {
+    public void setB(long b) {
         this.b = b;
     }
     
     public void messageEncoding(String str) {   
         
         for (int i = 0; i < str.length(); i++) {
-            int theta;
-            int alpha;
-            int x = (int) str.charAt(i);
+            long theta;
+            long alpha;
+            long x = (long) str.charAt(i);
             do {
                 alpha = (x*x*x + a*x + b)%prime;
-                theta = (int)(Math.pow(alpha,(prime-1)/2)%prime);
+                theta = (long)(Math.pow(alpha,(prime-1)/2)%prime);
                 x++;
             } while(theta!=1);
             
-            int beta = (int) Math.sqrt(alpha%prime);
-            int y = beta;
+            long beta = (long) Math.sqrt(alpha%prime);
+            long y = beta;
             
             Point pm = new Point(x,y);
             encriptedPoints.add(pm);
@@ -97,7 +97,7 @@ public class MessageEncoder {
         return res;
     }
     
-    public void encript(Point publicKey, int rand) {
+    public void encript(Point publicKey, long rand) {
         //check if the publicKey is valid
         for (int i = 0; i < encriptedPoints.size(); i++) {
             if (kg.publicKeyValidation(publicKey)) {

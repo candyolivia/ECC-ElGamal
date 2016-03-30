@@ -11,9 +11,9 @@ package ecc.elgamal;
  */
 public class HexaConverter {
     private String hexaAlpha = "0123456789ABCDEF";
-    public int SixteenthPower(int number) {
-        int res = 1;
-        for (int i = 0; i < number; i++) {
+    public long SixteenthPower(long number) {
+        long res = 1;
+        for (long i = 0; i < number; i++) {
             res *= 16;
         }
         return res;
@@ -29,7 +29,7 @@ public class HexaConverter {
     }
     
     public char deconvertHexaToChar(String hexa) {
-        int temp = 0;
+        long temp = 0;
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 16; j++) {
                 if (hexa.charAt(i)==hexaAlpha.charAt(j)) {

@@ -10,15 +10,15 @@ package ecc.elgamal;
  * @author Candy Olivia Mawalim
  */
 public class Point {
-    private int x;
-    private int y;
+    private long x;
+    private long y;
     
     public Point() {
         x = 0;
         y = 0;
     }
     
-    public Point(int _x, int _y) {
+    public Point(long _x, long _y) {
         x = _x;
         y = _y;
     }
@@ -28,19 +28,19 @@ public class Point {
         y = p.getY();
     }
 
-    public int getX() {
+    public long getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(long x) {
         this.x = x;
     }
 
-    public int getY() {
+    public long getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(long y) {
         this.y = y;
     }
     
@@ -68,7 +68,7 @@ public class Point {
         return new Point (x/p1.getX(), y/p1.getY());
     }
     
-    public Point multiply(int n) {
+    public Point multiply(long n) {
         return new Point (x*n, y*n);
     }
     

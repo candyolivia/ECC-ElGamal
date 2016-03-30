@@ -13,14 +13,14 @@ import java.util.ArrayList;
  */
 public class KeyGenerator {
     private ArrayList<Point> pointVect = new ArrayList<>();
-    private int prime;
+    private long prime;
     private long max;
     private int largestOrder;
     private Point G;
-    private int a = 2;
-    private int b = 1;
+    private long a = 2;
+    private long b = 1;
 
-    public KeyGenerator(int prime, long max) {
+    public KeyGenerator(long prime, long max) {
         this.prime = prime;
         this.max = max;
     }
@@ -37,11 +37,11 @@ public class KeyGenerator {
         this.pointVect = pointVect;
     }
 
-    public int getPrime() {
+    public long getPrime() {
         return prime;
     }
 
-    public void setPrime(int prime) {
+    public void setPrime(long prime) {
         this.prime = prime;
     }
 
@@ -61,19 +61,19 @@ public class KeyGenerator {
         this.G = G;
     }
 
-    public int getA() {
+    public long getA() {
         return a;
     }
 
-    public void setA(int a) {
+    public void setA(long a) {
         this.a = a;
     }
 
-    public int getB() {
+    public long getB() {
         return b;
     }
 
-    public void setB(int b) {
+    public void setB(long b) {
         this.b = b;
     }
 
@@ -86,11 +86,11 @@ public class KeyGenerator {
     }
    
     public void ellipticalCurveFunc() {
-        int y; //y2 = x3 + ax + b
-        for (int x = 0; x < max; x++) {
-            y = (int)Math.sqrt(x*x*x + a*x + b);
+        long y; //y2 = x3 + ax + b
+        for (long x = 0; x < max; x++) {
+            y = (long)Math.sqrt(x*x*x + a*x + b);
             if (y*y == x*x*x + a*x + b) {
-                int xTemp = x;
+                long xTemp = x;
                 if (xTemp > prime || y > prime) {
                     xTemp %= prime;
                     y %= prime;
@@ -145,8 +145,8 @@ public class KeyGenerator {
         return cek;
     }
     
-    public int checkKeyPosition(Point key) {
-        int idx = -99;
+    public long checkKeyPosition(Point key) {
+        long idx = -99;
         for (int i = 0; i < pointVect.size(); i++) {
             if (key.isEquals(pointVect.get(i))) {
                 idx = i;

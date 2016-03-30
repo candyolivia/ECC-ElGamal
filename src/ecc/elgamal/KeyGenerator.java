@@ -15,7 +15,7 @@ public class KeyGenerator {
     private ArrayList<Point> pointVect = new ArrayList<>();
     private long prime;
     private long max;
-    private int largestOrder;
+    private long largestOrder;
     private Point G;
     private long a = 2;
     private long b = 1;
@@ -77,11 +77,11 @@ public class KeyGenerator {
         this.b = b;
     }
 
-    public int getLargestOrder() {
+    public long getLargestOrder() {
         return largestOrder;
     }
 
-    public void setLargestOrder(int largestOrder) {
+    public void setLargestOrder(long largestOrder) {
         this.largestOrder = largestOrder;
     }
    
@@ -106,7 +106,7 @@ public class KeyGenerator {
             }
         }
         largestOrder = pointVect.size()-1;
-        G = pointVect.get(largestOrder);
+        G = pointVect.get((int) largestOrder);
     }
     
     public void printEllipticalPoints() {

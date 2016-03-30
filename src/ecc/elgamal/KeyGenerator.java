@@ -52,7 +52,39 @@ public class KeyGenerator {
     public void setMax(long max) {
         this.max = max;
     }
-    
+
+    public Point getG() {
+        return G;
+    }
+
+    public void setG(Point G) {
+        this.G = G;
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public void setA(int a) {
+        this.a = a;
+    }
+
+    public int getB() {
+        return b;
+    }
+
+    public void setB(int b) {
+        this.b = b;
+    }
+
+    public int getLargestOrder() {
+        return largestOrder;
+    }
+
+    public void setLargestOrder(int largestOrder) {
+        this.largestOrder = largestOrder;
+    }
+   
     public void ellipticalCurveFunc() {
         int y; //y2 = x3 + ax + b
         for (int x = 0; x < max; x++) {
@@ -103,9 +135,7 @@ public class KeyGenerator {
             //do nothing because key at infinity
         } else {
             //x*x*x + a*x + b
-            int ySquared = publicKey.getY()*publicKey.getY();
-            int x = publicKey.getX();
-            cek = ySquared == x*x*x + a*x +b;
+            cek = isElementOfPoints(publicKey.dividePoints(G));
         }
         return cek;
     }

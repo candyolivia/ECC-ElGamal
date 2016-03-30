@@ -18,10 +18,13 @@ public class MessageEncoder {
     private int b = 1;
     private ArrayList<Point> encriptedPoints = new ArrayList<>();
     private ArrayList<EncryptionPoint> encriptionRes = new ArrayList<>();
-    private KeyGenerator kg = new KeyGenerator(prime,max);
+    private KeyGenerator kg;
     
     public MessageEncoder() {
-        kg.ellipticalCurveFunc(a, b);
+        kg = new KeyGenerator(prime,max);
+        kg.setA(a);
+        kg.setB(b);
+        kg.ellipticalCurveFunc();
         kg.printEllipticalPoints();
     }
 
@@ -97,28 +100,25 @@ public class MessageEncoder {
     public void encript(Point publicKey, int rand) {
         //check if the publicKey is valid
         for (int i = 0; i < encriptedPoints.size(); i++) {
-            //kg.printEllipticalPoints();
-            //publicKey.print();
-            if (kg.isElementOfPoints(publicKey)) {
-                //Encription
-                Point C1 = new Point(kg.getPointVect().get(rand));
-                Point C2 = new Point(kg.getPointVect().get(rand + kg.checkKeyPosition(publicKey)));
+            if (kg.publicKeyValidation(publicKey)) {
+                Point C1 = new Point(kg.getG().multiply(rand));
+                Point C2 = new Point(publicKey.multiply(rand));
                 C2 = C2.addPoints(encriptedPoints.get(i));
                 EncryptionPoint ep = new EncryptionPoint(C1,C2);
                 
                 encriptionRes.add(ep);
 
-            } else {
+            }
+            else {
                 System.out.println("wrong public key");
             }
         }
     }
     
-    public void decript(int id, Point privateKey) {
+    public void decript(Point privateKey) {
         for (int i = 0; i < encriptionRes.size(); i++) {
-            Point M = new Point(kg.getPointVect().get(kg.checkKeyPosition(privateKey)+kg.checkKeyPosition(encriptionRes.get(i).getC1())));
+            Point M = new Point(privateKey.multiplePoints(encriptionRes.get(i).getC1()));
             Point Pm = new Point(encriptionRes.get(i).getC2().substractPoints(M));
-            Pm.setY(Pm.getY()+1);
             Pm.print();
         }
         
@@ -147,15 +147,27 @@ public class MessageEncoder {
         me.printEncriptedPoints();
         System.out.println("Elliptical Points : ");
         me.getKg().printEllipticalPoints();
-        System.out.println("Public Key : ");
-        if (me.getKg().generatePublicKey(3)!=null) {
-            me.getKg().generatePublicKey(3).print();
-        }
-        me.encript(me.getKg().generatePublicKey(3),1);
+        
+        System.out.print("Bob's Private Key : ");
+        Point bobPrivate = me.getKg().generatePrivateKey(2);
+        me.getKg().generatePrivateKey(2).print();
+        System.out.print("Bob's Public Key : ");
+        Point bobPublic = me.getKg().generatePublicKey(bobPrivate);
+        me.getKg().generatePublicKey(bobPrivate).print();
+        
+        System.out.print("Alice's Private Key : ");
+        Point alicePrivate = me.getKg().generatePrivateKey(3);
+        me.getKg().generatePrivateKey(3).print();
+        System.out.print("Alice's Public Key : ");
+        Point alicePublic = me.getKg().generatePublicKey(alicePrivate);
+        me.getKg().generatePublicKey(bobPrivate).print();
+        
+        me.encript(bobPublic,1); //rand number = 1
+        System.out.println("Encription Result :");
         me.printEncriptionRes();
+
         System.out.println("Decript Result Pm : ");
-        Point p1 = new Point(me.getKg().generatePublicKey(2).getX(),me.getKg().generatePublicKey(2).getY());
-        me.decript(3, p1);
+        me.decript(bobPrivate);
     }
     
     

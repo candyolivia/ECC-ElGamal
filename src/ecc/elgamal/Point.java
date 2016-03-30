@@ -64,6 +64,10 @@ public class Point {
         return new Point (x*p1.getX(), y*p1.getY());
     }
     
+    public Point dividePoints(Point p1){
+        return new Point (x/p1.getX(), y/p1.getY());
+    }
+    
     public Point multiply(int n) {
         return new Point (x*n, y*n);
     }

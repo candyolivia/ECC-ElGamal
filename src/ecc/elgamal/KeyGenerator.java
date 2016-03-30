@@ -121,12 +121,17 @@ public class KeyGenerator {
     }
     
     public Point generatePrivateKey(int n) { //asumsi nilai n pasti lebih kecil dari prime
-        if (n > prime){
-            System.out.println("Error nilai n harus lebih kecil atau sama dengan prime");
-            assert n>prime : "number is greater than prime";
+        Point p = new Point();
+        if (n > largestOrder){
+            System.out.println("Error nilai n harus lebih kecil atau sama dengan largestOrder");
+            assert n>largestOrder : "number is greater than largestOrder of GeneratedPoints";
+            p = null;
+            System.exit(0);
+            
+        } else {
+            p = pointVect.get(n-1);
         }
-        
-        return pointVect.get(n-1);
+        return p;
     }
     
     public boolean publicKeyValidation(Point publicKey) {
@@ -168,11 +173,12 @@ public class KeyGenerator {
         kg.ellipticalCurveFunc();
         kg.printEllipticalPoints();
         System.out.print("Bob's Private Key : ");
-        Point bobPrivate = kg.generatePrivateKey(2);
+        Point bobPrivate = kg.generatePrivateKey(9);
         kg.generatePrivateKey(2).print();
         System.out.print("Bob's Public Key : ");
+        Point bobPublic = kg.generatePublicKey(bobPrivate);
         kg.generatePublicKey(bobPrivate).print();
-        System.out.println("Key Validation : " +kg.publicKeyValidation(bobPrivate));
+        System.out.println("Key Validation : " +kg.publicKeyValidation(bobPublic));
                 
     }
     

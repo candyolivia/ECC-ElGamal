@@ -148,16 +148,17 @@ public class MessageEncoder {
         System.out.println("Elliptical Points : ");
         me.getKg().printEllipticalPoints();
         
+        ///NOTES : Nilai k dari Bob dan Alice tidak boleh melebihi largestOrder di KeyGenerator
         System.out.print("Bob's Private Key : ");
-        Point bobPrivate = me.getKg().generatePrivateKey(2);
-        me.getKg().generatePrivateKey(2).print();
+        Point bobPrivate = me.getKg().generatePrivateKey(1);
+        me.getKg().generatePrivateKey(1).print();
         System.out.print("Bob's Public Key : ");
         Point bobPublic = me.getKg().generatePublicKey(bobPrivate);
         me.getKg().generatePublicKey(bobPrivate).print();
         
         System.out.print("Alice's Private Key : ");
-        Point alicePrivate = me.getKg().generatePrivateKey(3);
-        me.getKg().generatePrivateKey(3).print();
+        Point alicePrivate = me.getKg().generatePrivateKey(2);
+        me.getKg().generatePrivateKey(2).print();
         System.out.print("Alice's Public Key : ");
         Point alicePublic = me.getKg().generatePublicKey(alicePrivate);
         me.getKg().generatePublicKey(bobPrivate).print();

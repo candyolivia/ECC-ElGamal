@@ -50,7 +50,6 @@ public class ElGamalAlgorithm {
             firstPlain.setX(secretKey * ciphertext.get(i).getC1().getX());
             firstPlain.setY(secretKey * ciphertext.get(i).getC1().getY());
             messagePoint.setX(ciphertext.get(i).getC2().getX());
-            System.out.println(firstPlain.getX());
             messagePoint.setY(ciphertext.get(i).getC2().getY());
             plaintext.add(messagePoint.getX());
         }

@@ -23,32 +23,37 @@ public class ElGamalAlgorithm {
     }
     
     // Method
-    public EncryptionPoint encrypt(long plaintext, Point base, Point publicKey, long k) {
-        EncryptionPoint ciphertext;
+    public ArrayList<EncryptionPoint> encrypt(ArrayList<Long> plaintext, Point base, Point publicKey, long k) {
+        ArrayList<EncryptionPoint> ciphertext = new ArrayList<>();
         Point firstCipher, secondCipher, messagePoint;
         
-        messagePoint = new Point();
-        messagePoint.setX(plaintext);
-        messagePoint.setY(ellipticalCurveFunction(messagePoint.getX()));
-        firstCipher = new Point(k * base.getX(), k * base.getY());
-        secondCipher = new Point(k * publicKey.getX() + messagePoint.getX(), k * publicKey.getY() + messagePoint.getY());
-        ciphertext = new EncryptionPoint(firstCipher, secondCipher);
+        for (int i = 0; i < plaintext.size(); i++) {
+            messagePoint = new Point();
+            messagePoint.setX(plaintext.get(i));
+            messagePoint.setY(ellipticalCurveFunction(messagePoint.getX()));
+            firstCipher = new Point(k * base.getX(), k * base.getY());
+            secondCipher = new Point(k * publicKey.getX() + messagePoint.getX(), k * publicKey.getY() + messagePoint.getY());
+            secondCipher.setY(secondCipher.getY() % 256);
+            ciphertext.add(new EncryptionPoint(firstCipher, secondCipher));
+        }
         
         return ciphertext;
     }
     
-    public long decrypt(EncryptionPoint ciphertext, long secretKey) {
+    public ArrayList<Long> decrypt(ArrayList<EncryptionPoint> ciphertext, long secretKey) {
         Point firstPlain, messagePoint;
-        long plaintext;
+        ArrayList<Long> plaintext = new ArrayList<>();
         
         firstPlain = new Point();
         messagePoint = new Point();
-        firstPlain.setX(secretKey * ciphertext.getC1().getX());
-        firstPlain.setY(secretKey * ciphertext.getC1().getY());
-        messagePoint.setX(ciphertext.getC2().getX() - firstPlain.getX());
-        messagePoint.setY(ciphertext.getC2().getY() - firstPlain.getY());
-        plaintext = ellipticalCurveReverseFunction(messagePoint.getY());
-//        plaintext = messagePoint.getX();
+        for (int i = 0; i < ciphertext.size(); i++) {
+            firstPlain.setX(secretKey * ciphertext.get(i).getC1().getX());
+            firstPlain.setY(secretKey * ciphertext.get(i).getC1().getY());
+            messagePoint.setX(ciphertext.get(i).getC2().getX());
+            System.out.println(firstPlain.getX());
+            messagePoint.setY(ciphertext.get(i).getC2().getY());
+            plaintext.add(messagePoint.getX());
+        }
         
         return plaintext;
     }
@@ -59,15 +64,6 @@ public class ElGamalAlgorithm {
         y = (long) Math.sqrt(Math.pow(x, 3) + a * x + b);
         
         return y;
-    }
-    
-    private long ellipticalCurveReverseFunction(long y) {
-        long x, d;
-        
-        d = b - (long) Math.pow(y, 2);
-        x = (long) Math.cbrt(-d/2 + Math.sqrt(Math.pow(-d/2, 2) + Math.pow(a/3, 3))) + (long) Math.cbrt(-d/2 - Math.sqrt(Math.pow(-d/2, 2) + Math.pow(a/3, 3)));
-        
-        return x;
     }
 
     /**

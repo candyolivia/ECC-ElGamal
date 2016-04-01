@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -337,6 +338,7 @@ public class MainPanel extends javax.swing.JPanel {
                 
                 try {
                     ciphertext = Files.readAllLines(fileChooser.getSelectedFile().toPath());
+                    fileTextField.setText(fileChooser.getSelectedFile().toString());
                     for (int i = 0; i < ciphertext.size(); i++) {
                         String[] cipherHexa = ciphertext.get(i).split(" ");
                         cipher.add(new EncryptionPoint(new Point((long) hexaConverter.deconvertHexaToChar(cipherHexa[0]), (long) hexaConverter.deconvertHexaToChar(cipherHexa[1])), new Point((long) hexaConverter.deconvertHexaToChar(cipherHexa[2]), (long) hexaConverter.deconvertHexaToChar(cipherHexa[3]))));
@@ -378,6 +380,7 @@ public class MainPanel extends javax.swing.JPanel {
                 lines.add(hexaConverter.convertCharToHexa((char) cipher.get(i).getC1().getX()) + " " + hexaConverter.convertCharToHexa((char) cipher.get(i).getC1().getY()) + " " + hexaConverter.convertCharToHexa((char) cipher.get(i).getC2().getX()) + " " + hexaConverter.convertCharToHexa((char) cipher.get(i).getC2().getY()));
             }
             path = Paths.get("cipher.txt");
+            JOptionPane.showMessageDialog(null, cipher.size() * 4 * 2 + " bytes", "File Size", JOptionPane.INFORMATION_MESSAGE);
             try {
                 Files.write(path, lines, Charset.forName("UTF-8"));
             } catch (IOException ex) {
@@ -388,20 +391,27 @@ public class MainPanel extends javax.swing.JPanel {
 
     private void executeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_executeButtonActionPerformed
         // TODO add your handling code here:
+        double startTime, endTime;
         String temp = "";
         if (encryptRadioButton.isSelected()) {
+            startTime = System.currentTimeMillis();
             cipher = elGamal.encrypt(plain, keyGenerator.getG(), publicKey, Long.parseLong(randomTextField.getText()));
+            endTime = System.currentTimeMillis();
             for (int i = 0; i < cipher.size(); i++) {
                 temp += "[ (" + cipher.get(i).getC1().getX() + "," + cipher.get(i).getC1().getY() + ") , (" + cipher.get(i).getC2().getX() + "," + cipher.get(i).getC2().getY() + ") ]\n";
             }
             cipherTextArea.setText(temp);
         } else {
+            startTime = System.currentTimeMillis();
             plain = elGamal.decrypt(cipher, Long.parseLong(secretTextField.getText()));
+            endTime = System.currentTimeMillis();
             for (int i = 0; i < plain.size(); i++) {
                 temp += plain.get(i) + "\n";
             }
             plainTextArea.setText(temp);
         }
+        double time = endTime - startTime;
+        JOptionPane.showMessageDialog(null, time + " ms", "Time Elapsed", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_executeButtonActionPerformed
 
 

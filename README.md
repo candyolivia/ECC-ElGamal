@@ -1,2 +1,2 @@
 # ECC-ElGamal
-Elliptic Curve Cryptography ElGamal (ECCEG)
+Application which used to generate Elliptic Curve Cryptography ElGamal encryption and decryption
